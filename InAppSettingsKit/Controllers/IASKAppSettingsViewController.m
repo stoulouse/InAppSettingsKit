@@ -518,7 +518,7 @@ CGRect IASKCGRectSwap(CGRect rect);
 	else if ([specifier.type isEqualToString:kIASKPSTextFieldSpecifier]) {
 		cell.textLabel.text = specifier.title;
 		
-		NSString *textValue = [self.settingsStore objectForKey:specifier.key] != nil ? [self.settingsStore objectForKey:specifier.key] : specifier.defaultStringValue;
+		NSString *textValue = [self.settingsStore objectForKey:specifier.key] != nil ? [self.settingsStore objectForKey:specifier.key] : @"";
 		if (textValue && ![textValue isMemberOfClass:[NSString class]]) {
 			textValue = [NSString stringWithFormat:@"%@", textValue];
 		}
@@ -534,6 +534,7 @@ CGRect IASKCGRectSwap(CGRect rect);
 		} else {
 			textField.autocorrectionType = specifier.autoCorrectionType;
 		}
+		textField.placeholder = [specifier localizedObjectForKey:kIASKDefaultValue];
 		textField.textAlignment = specifier.textAlignment;
 		textField.adjustsFontSizeToFitWidth = specifier.adjustsFontSizeToFitWidth;
 	}
