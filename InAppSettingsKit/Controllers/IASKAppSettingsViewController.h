@@ -70,4 +70,6 @@
 - (void)synchronizeSettings;
 - (void)dismiss:(id)sender;
 - (void)setHiddenKeys:(NSSet*)hiddenKeys animated:(BOOL)animated;
+- (UIViewController*)pushChildViewControllerForSpecifier:(IASKSpecifier*)specifier;
+
 @end

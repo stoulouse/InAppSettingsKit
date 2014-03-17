@@ -92,22 +92,30 @@
 	[super viewDidDisappear:animated];
 }
 
-
+#if __IPHONE_OS_VERSION_MAX_ALLOWED < 60000
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
 	return YES;
-}
-
-- (void)didReceiveMemoryWarning {
-	// Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
-	
-	// Release any cached data, images, etc that aren't in use.
 }
 
 - (void)viewDidUnload {
 	// Release any retained subviews of the main view.
 	// e.g. self.myOutlet = nil;
 	self.tableView = nil;
+}
+#else
+- (BOOL)shouldAutorotate {
+	return YES;
+}
+- (NSUInteger)supportedInterfaceOrientations {
+	return UIInterfaceOrientationMaskAll;
+}
+#endif
+
+- (void)didReceiveMemoryWarning {
+	// Releases the view if it doesn't have a superview.
+    [super didReceiveMemoryWarning];
+	
+	// Release any cached data, images, etc that aren't in use.
 }
 
 #pragma mark -
@@ -176,6 +184,7 @@
                                                         object:[_currentSpecifier key]
                                                       userInfo:[NSDictionary dictionaryWithObject:[values objectAtIndex:indexPath.row]
                                                                                            forKey:[_currentSpecifier key]]];
+	[self.navigationController popViewControllerAnimated:YES];
 }
 
 - (CGSize)contentSizeForViewInPopover {

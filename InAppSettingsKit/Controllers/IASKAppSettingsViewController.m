@@ -62,6 +62,46 @@ CGRect IASKCGRectSwap(CGRect rect);
 @synthesize settingsStore = _settingsStore;
 @synthesize file = _file;
 
+- (UIViewController*)pushChildViewControllerForSpecifier:(IASKSpecifier*)specifier {
+	Class vcClass = [specifier viewControllerClass];
+	if (vcClass) {
+		SEL initSelector = [specifier viewControllerSelector];
+		if (!initSelector) {
+			initSelector = @selector(init);
+		}
+		UIViewController * vc = [vcClass alloc];
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
+		vc = [vc performSelector:initSelector withObject:[specifier file] withObject:[specifier key]];
+#pragma clang diagnostic pop
+		if ([vc respondsToSelector:@selector(setDelegate:)]) {
+			[vc performSelector:@selector(setDelegate:) withObject:self.delegate];
+		}
+		if ([vc respondsToSelector:@selector(setSettingsStore:)]) {
+			[vc performSelector:@selector(setSettingsStore:) withObject:self.settingsStore];
+		}
+		[self.navigationController pushViewController:vc animated:YES];
+		return vc;
+	}
+	
+	if (nil == [specifier file]) {
+		return nil;
+	}
+	
+	IASKAppSettingsViewController *targetViewController = [[[self class] alloc] init];
+	targetViewController.showDoneButton = NO;
+	targetViewController.settingsStore = self.settingsStore;
+	targetViewController.delegate = self.delegate;
+	targetViewController.file = specifier.file;
+	targetViewController.hiddenKeys = self.hiddenKeys;
+	targetViewController.title = specifier.title;
+	targetViewController.showCreditsFooter = NO;
+	_currentChildViewController = targetViewController;
+	[[self navigationController] pushViewController:targetViewController animated:YES];
+	
+	return targetViewController;
+}
+
 #pragma mark accessors
 - (IASKSettingsReader*)settingsReader {
 	if (!_settingsReader) {
@@ -141,13 +181,15 @@ CGRect IASKCGRectSwap(CGRect rect);
     [self.tableView addGestureRecognizer:tapGesture];
 }
 
+#if __IPHONE_OS_VERSION_MAX_ALLOWED < 60000
 - (void)viewDidUnload {
-  [super viewDidUnload];
-
+	[super viewDidUnload];
+	
 	// Release any retained subviews of the main view.
 	// e.g. self.myOutlet = nil;
 	self.view = nil;
 }
+#endif
 
 - (void)viewWillAppear:(BOOL)animated {
 	// if there's something selected, the value might have changed
@@ -211,9 +253,18 @@ CGRect IASKCGRectSwap(CGRect rect);
 	[super viewDidDisappear:animated];
 }
 
+#if __IPHONE_OS_VERSION_MAX_ALLOWED < 60000
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return YES;
 }
+#else
+- (BOOL)shouldAutorotate {
+	return YES;
+}
+- (NSUInteger)supportedInterfaceOrientations {
+	return UIInterfaceOrientationMaskAll;
+}
+#endif
 
 - (void)setHiddenKeys:(NSSet *)theHiddenKeys {
 	[self setHiddenKeys:theHiddenKeys animated:NO];
@@ -406,7 +457,7 @@ CGRect IASKCGRectSwap(CGRect rect);
 		CGSize size = [title sizeWithFont:[UIFont boldSystemFontOfSize:[UIFont labelFontSize]] 
 						constrainedToSize:CGSizeMake(tableView.frame.size.width - 2*kIASKHorizontalPaddingGroupTitles, INFINITY)
 							lineBreakMode:NSLineBreakByWordWrapping];
-		return roundf(size.height+kIASKVerticalPaddingGroupTitles);
+		return (CGFloat)round(size.height+kIASKVerticalPaddingGroupTitles);
 	}
 	return 0;
 }
@@ -458,8 +509,13 @@ CGRect IASKCGRectSwap(CGRect rect);
 	} else {
 		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
 	}
+#if __IPHONE_OS_VERSION_MAX_ALLOWED < 60000
 	cell.textLabel.minimumFontSize = kIASKMinimumFontSize;
 	cell.detailTextLabel.minimumFontSize = kIASKMinimumFontSize;
+#else
+	cell.textLabel.minimumScaleFactor = kIASKMinimumFontSize / cell.textLabel.font.pointSize;
+	cell.detailTextLabel.minimumScaleFactor = kIASKMinimumFontSize / cell.detailTextLabel.font.pointSize;
+#endif
 	return cell;
 }
 
@@ -614,42 +670,11 @@ CGRect IASKCGRectSwap(CGRect rect);
         [textFieldCell.textField becomeFirstResponder];
         
     } else if ([[specifier type] isEqualToString:kIASKPSChildPaneSpecifier]) {
-        Class vcClass = [specifier viewControllerClass];
-        if (vcClass) {
-            SEL initSelector = [specifier viewControllerSelector];
-            if (!initSelector) {
-                initSelector = @selector(init);
-            }
-            UIViewController * vc = [vcClass alloc];
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
-            vc = [vc performSelector:initSelector withObject:[specifier file] withObject:[specifier key]];
-#pragma clang diagnostic pop
-            if ([vc respondsToSelector:@selector(setDelegate:)]) {
-                [vc performSelector:@selector(setDelegate:) withObject:self.delegate];
-            }
-            if ([vc respondsToSelector:@selector(setSettingsStore:)]) {
-                [vc performSelector:@selector(setSettingsStore:) withObject:self.settingsStore];
-            }
-            [self.navigationController pushViewController:vc animated:YES];
-            return;
-        }
-        
-        if (nil == [specifier file]) {
-            [tableView deselectRowAtIndexPath:indexPath animated:YES];
-            return;
-        }
-        
-        IASKAppSettingsViewController *targetViewController = [[[self class] alloc] init];
-        targetViewController.showDoneButton = NO;
-        targetViewController.settingsStore = self.settingsStore;
-        targetViewController.delegate = self.delegate;
-        targetViewController.file = specifier.file;
-        targetViewController.hiddenKeys = self.hiddenKeys;
-        targetViewController.title = specifier.title;
-        targetViewController.showCreditsFooter = NO;
-        _currentChildViewController = targetViewController;
-        [[self navigationController] pushViewController:targetViewController animated:YES];
+		[self pushChildViewControllerForSpecifier:specifier];
+		if (nil == [specifier file]) {
+			[tableView deselectRowAtIndexPath:indexPath animated:YES];
+			return;
+		}
     } else if ([[specifier type] isEqualToString:kIASKOpenURLSpecifier]) {
         [tableView deselectRowAtIndexPath:indexPath animated:YES];
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:specifier.file]];

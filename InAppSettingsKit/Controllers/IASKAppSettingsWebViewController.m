@@ -50,6 +50,7 @@
 	[webView loadRequest:[NSURLRequest requestWithURL:self.url]];
 }
 
+#if __IPHONE_OS_VERSION_MAX_ALLOWED < 60000
 - (void)viewDidUnload {
 	[super viewDidUnload];
 	self.webView = nil;
@@ -58,6 +59,14 @@
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return YES;
 }
+#else
+- (BOOL)shouldAutorotate {
+	return YES;
+}
+- (NSUInteger)supportedInterfaceOrientations {
+	return UIInterfaceOrientationMaskAll;
+}
+#endif
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView {
 	self.navigationItem.title = [self.webView stringByEvaluatingJavaScriptFromString:@"document.title"];
