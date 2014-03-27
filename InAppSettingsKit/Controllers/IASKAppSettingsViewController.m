@@ -89,6 +89,7 @@ CGRect IASKCGRectSwap(CGRect rect);
 	}
 	
 	IASKAppSettingsViewController *targetViewController = [[[self class] alloc] init];
+	targetViewController.tableView.rowHeight = self.tableView.rowHeight;
 	targetViewController.showDoneButton = NO;
 	targetViewController.settingsStore = self.settingsStore;
 	targetViewController.delegate = self.delegate;
@@ -425,7 +426,7 @@ CGRect IASKCGRectSwap(CGRect rect);
 			return 0;
 		}
 	}
-	return tableView.rowHeight;
+	return tableView.rowHeight * [specifier numberOfLines];
 }
 
 - (NSString *)tableView:(UITableView*)tableView titleForHeaderInSection:(NSInteger)section {
@@ -570,6 +571,7 @@ CGRect IASKCGRectSwap(CGRect rect);
 		
 		cell.detailTextLabel.text = stringValue;
 		cell.userInteractionEnabled = NO;
+		cell.textLabel.numberOfLines = [specifier numberOfLines];
 	}
 	else if ([specifier.type isEqualToString:kIASKPSTextFieldSpecifier]) {
 		cell.textLabel.text = specifier.title;
@@ -613,14 +615,17 @@ CGRect IASKCGRectSwap(CGRect rect);
 	}
 	else if ([specifier.type isEqualToString:kIASKPSChildPaneSpecifier]) {
 		cell.textLabel.text = specifier.title;
+		cell.textLabel.numberOfLines = [specifier numberOfLines];
 	} else if ([specifier.type isEqualToString:kIASKOpenURLSpecifier] || [specifier.type isEqualToString:kIASKMailComposeSpecifier]) {
 		cell.textLabel.text = specifier.title;
 		cell.detailTextLabel.text = [specifier.defaultValue description];
 	} else if ([specifier.type isEqualToString:kIASKButtonSpecifier]) {
 		NSString *value = [self.settingsStore objectForKey:specifier.key];
 		cell.textLabel.text = [value isKindOfClass:[NSString class]] ? [self.settingsReader titleForStringId:value] : specifier.title;
+		cell.textLabel.numberOfLines = [specifier numberOfLines];
 	} else {
 		cell.textLabel.text = specifier.title;
+		cell.textLabel.numberOfLines = [specifier numberOfLines];
 	}
     
 	cell.imageView.image = specifier.cellImage;

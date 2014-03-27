@@ -284,4 +284,11 @@
 	}
 	return NSTextAlignmentLeft;
 }
+-(NSInteger)numberOfLines
+{
+	if ([_specifierDict objectForKey:kIASKTextLabelNumberOfLine]) {
+		return [[_specifierDict objectForKey:kIASKTextLabelNumberOfLine] integerValue];
+	}
+	return 1;
+}
 @end
