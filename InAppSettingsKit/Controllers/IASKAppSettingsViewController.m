@@ -608,7 +608,7 @@ CGRect IASKCGRectSwap(CGRect rect);
     else if ([specifier.type isEqualToString:kIASKDatePickeSpecifier] || [specifier.type isEqualToString:kIASKTimePickerSpecifier]) {
 		cell.textLabel.text = specifier.title;
 		
-		NSString *textValue = [self.settingsStore objectForKey:specifier.key] != nil ? [self.settingsStore objectForKey:specifier.key] : specifier.defaultStringValue;
+		NSString *textValue = [self.settingsStore objectForKey:specifier.key] != nil ? [self.settingsStore objectForKey:specifier.key] : @"";
 		if (textValue && ![textValue isMemberOfClass:[NSString class]]) {
 			textValue = [NSString stringWithFormat:@"%@", textValue];
 		}
@@ -616,6 +616,8 @@ CGRect IASKCGRectSwap(CGRect rect);
 		textField.text = textValue;
 		textField.key = specifier.key;
         textField.textAlignment = specifier.textAlignment;
+		textField.placeholder = [specifier localizedObjectForKey:kIASKDefaultValue];
+		textField.adjustsFontSizeToFitWidth = specifier.adjustsFontSizeToFitWidth;
         ((IASKDatePicker *)textField.inputView).inIndexPath = indexPath;
     }
     
