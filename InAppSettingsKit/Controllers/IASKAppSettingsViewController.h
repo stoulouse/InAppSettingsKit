@@ -35,6 +35,9 @@
 - (UIView *) settingsViewController:(id<IASKViewController>)settingsViewController
                           tableView:(UITableView *)tableView
             viewForHeaderForSection:(NSInteger)section;
+- (void)settingsViewController:(id<IASKViewController>)settingsViewController
+				 customizeCell:(UITableViewCell*)cell
+				 withSpecifier:(IASKSpecifier*)specifier;
 
 #pragma mark - UITableView cell customization
 - (CGFloat)tableView:(UITableView*)tableView heightForSpecifier:(IASKSpecifier*)specifier;
@@ -71,5 +74,6 @@
 - (void)dismiss:(id)sender;
 - (void)setHiddenKeys:(NSSet*)hiddenKeys animated:(BOOL)animated;
 - (UIViewController*)pushChildViewControllerForSpecifier:(IASKSpecifier*)specifier;
+- (UITableViewCell*)newCellForIdentifier:(NSString*)identifier;
 
 @end

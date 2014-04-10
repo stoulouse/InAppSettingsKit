@@ -205,11 +205,12 @@ CGRect IASKCGRectSwap(CGRect rect);
 	}
 	
 	if (_showDoneButton) {
-		UIBarButtonItem *buttonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone 
+		UIBarButtonItem *buttonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Done", @"Done") style:UIBarButtonItemStylePlain
 																					target:self 
 																					action:@selector(dismiss:)];
+		[buttonItem setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIColor grayColor], UITextAttributeTextColor, nil] forState:UIControlStateNormal];
 		self.navigationItem.rightBarButtonItem = buttonItem;
-	} 
+	}
 	if (!self.title) {
 		self.title = NSLocalizedString(@"Settings", @"");
 	}
@@ -526,6 +527,7 @@ CGRect IASKCGRectSwap(CGRect rect);
 	cell.textLabel.minimumScaleFactor = kIASKMinimumFontSize / cell.textLabel.font.pointSize;
 	cell.detailTextLabel.minimumScaleFactor = kIASKMinimumFontSize / cell.detailTextLabel.font.pointSize;
 #endif
+	
 	return cell;
 }
 
@@ -662,6 +664,11 @@ CGRect IASKCGRectSwap(CGRect rect);
 	cell.detailTextLabel.textAlignment = specifier.textAlignment;
 	cell.textLabel.adjustsFontSizeToFitWidth = specifier.adjustsFontSizeToFitWidth;
 	cell.detailTextLabel.adjustsFontSizeToFitWidth = specifier.adjustsFontSizeToFitWidth;
+	
+	if ([self.delegate respondsToSelector:@selector(settingsViewController:customizeCell:withSpecifier:)]) {
+		[self.delegate settingsViewController:self customizeCell:cell withSpecifier:specifier];
+	}
+	
     return cell;
 }
 
