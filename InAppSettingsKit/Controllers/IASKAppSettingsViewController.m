@@ -98,6 +98,7 @@ CGRect IASKCGRectSwap(CGRect rect);
 	targetViewController.hiddenKeys = self.hiddenKeys;
 	targetViewController.title = specifier.title;
 	targetViewController.showCreditsFooter = NO;
+
 	_currentChildViewController = targetViewController;
 	[[self navigationController] pushViewController:targetViewController animated:YES];
 	
@@ -597,6 +598,7 @@ CGRect IASKCGRectSwap(CGRect rect);
 		textField.delegate = self;
 		textField.secureTextEntry = [specifier isSecure];
 		textField.keyboardType = specifier.keyboardType;
+		textField.returnKeyType = specifier.returnKeyType;
 		textField.autocapitalizationType = specifier.autocapitalizationType;
 		if([specifier isSecure]){
 			textField.autocorrectionType = UITextAutocorrectionTypeNo;

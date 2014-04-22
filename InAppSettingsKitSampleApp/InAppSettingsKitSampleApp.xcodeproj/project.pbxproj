@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		013E3B0B1906647000D70982 /* IASKDatePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 013E3B0A1906647000D70982 /* IASKDatePicker.m */; };
 		1D3623260D0F684500981E51 /* InAppSettingsKitSampleAppAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* InAppSettingsKitSampleAppAppDelegate.m */; };
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
@@ -47,6 +48,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		013E3B091906647000D70982 /* IASKDatePicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IASKDatePicker.h; sourceTree = "<group>"; };
+		013E3B0A1906647000D70982 /* IASKDatePicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IASKDatePicker.m; sourceTree = "<group>"; };
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1D3623240D0F684500981E51 /* InAppSettingsKitSampleAppAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InAppSettingsKitSampleAppAppDelegate.h; sourceTree = "<group>"; };
 		1D3623250D0F684500981E51 /* InAppSettingsKitSampleAppAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InAppSettingsKitSampleAppAppDelegate.m; sourceTree = "<group>"; };
@@ -262,6 +265,8 @@
 				DA33F58C10BC2222004736E8 /* IASKSwitch.m */,
 				DA33F58D10BC2222004736E8 /* IASKTextField.h */,
 				DA33F58E10BC2222004736E8 /* IASKTextField.m */,
+				013E3B091906647000D70982 /* IASKDatePicker.h */,
+				013E3B0A1906647000D70982 /* IASKDatePicker.m */,
 			);
 			name = Views;
 			path = ../InAppSettingsKit/Views;
@@ -395,6 +400,7 @@
 				AA87D1DD113FB0FA00101881 /* IASKPSTitleValueSpecifierViewCell.m in Sources */,
 				AAA468D8125CD9680057A662 /* CustomSubviewController.m in Sources */,
 				AAB838A012846D850042FF80 /* CustomViewCell.m in Sources */,
+				013E3B0B1906647000D70982 /* IASKDatePicker.m in Sources */,
 				F48E09EA123D03E000B67C05 /* IASKAppSettingsWebViewController.m in Sources */,
 				AA8746D0128B02B600CACD4C /* IASKSettingsStoreUserDefaults.m in Sources */,
 				AA8746D1128B02B600CACD4C /* IASKSettingsStoreFile.m in Sources */,

@@ -180,6 +180,32 @@
     return [[_specifierDict objectForKey:kIASKIsSecure] boolValue];
 }
 
+- (UIReturnKeyType)returnKeyType {
+    if ([[_specifierDict objectForKey:KIASKReturnKeyType] isEqualToString:kIASKReturnKeyDefault]) {
+        return UIReturnKeyDefault;
+    } else if ([[_specifierDict objectForKey:KIASKReturnKeyType] isEqualToString:kIASKReturnKeyGo]) {
+        return UIReturnKeyGo;
+    } else if ([[_specifierDict objectForKey:KIASKReturnKeyType] isEqualToString:kIASKReturnKeyGoogle]) {
+        return UIReturnKeyGoogle;
+    } else if ([[_specifierDict objectForKey:KIASKReturnKeyType] isEqualToString:kIASKReturnKeyJoin]) {
+        return UIReturnKeyJoin;
+    } else if ([[_specifierDict objectForKey:KIASKReturnKeyType] isEqualToString:kIASKReturnKeyNext]) {
+        return UIReturnKeyNext;
+    } else if ([[_specifierDict objectForKey:KIASKReturnKeyType] isEqualToString:kIASKReturnKeyRoute]) {
+        return UIReturnKeyRoute;
+    } else if ([[_specifierDict objectForKey:KIASKReturnKeyType] isEqualToString:kIASKReturnKeySearch]) {
+        return UIReturnKeySearch;
+    } else if ([[_specifierDict objectForKey:KIASKReturnKeyType] isEqualToString:kIASKReturnKeySend]) {
+        return UIReturnKeySend;
+    } else if ([[_specifierDict objectForKey:KIASKReturnKeyType] isEqualToString:kIASKReturnKeyYahoo]) {
+        return UIReturnKeyYahoo;
+    } else if ([[_specifierDict objectForKey:KIASKReturnKeyType] isEqualToString:kIASKReturnKeyDone]) {
+        return UIReturnKeyDone;
+    } else if ([[_specifierDict objectForKey:KIASKReturnKeyType] isEqualToString:kIASKReturnKeyEmergencyCall]) {
+        return UIReturnKeyEmergencyCall;
+    }
+	return UIReturnKeyDefault;
+}
 - (UIKeyboardType)keyboardType {
     if ([[_specifierDict objectForKey:KIASKKeyboardType] isEqualToString:kIASKKeyboardAlphabet]) {
         return UIKeyboardTypeDefault;

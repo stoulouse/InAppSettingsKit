@@ -44,6 +44,7 @@
 - (NSString*)minimumValueImage;
 - (NSString*)maximumValueImage;
 - (BOOL)isSecure;
+- (UIReturnKeyType)returnKeyType;
 - (UIKeyboardType)keyboardType;
 - (UITextAutocapitalizationType)autocapitalizationType;
 - (UITextAutocorrectionType)autoCorrectionType;
