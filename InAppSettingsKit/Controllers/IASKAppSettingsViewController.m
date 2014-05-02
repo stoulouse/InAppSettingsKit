@@ -508,6 +508,16 @@ CGRect IASKCGRectSwap(CGRect rect);
         [datePicker addTarget:self action:@selector(_dateChanged:) forControlEvents:UIControlEventValueChanged];
         datePicker.datePickerMode = [identifier isEqualToString:kIASKDatePickeSpecifier] ? UIDatePickerModeDate : UIDatePickerModeTime;
         ((IASKPSTextFieldSpecifierViewCell*)cell).textField.inputView = datePicker;
+
+		{
+			UIToolbar* keyboardToolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, cell.bounds.size.width, 44)];
+			[keyboardToolbar setBarStyle:UIBarStyleBlackTranslucent];
+			UIBarButtonItem* flexSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+			IASKDatePickerBarButtonItem* done = [[IASKDatePickerBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(_dateDone:)];
+			done.datePicker = datePicker;
+			[keyboardToolbar setItems:[[NSArray alloc] initWithObjects: flexSpace, done, nil]];
+			((IASKPSTextFieldSpecifierViewCell*)cell).textField.inputAccessoryView = keyboardToolbar;
+		}
 	}
 
 	else if ([identifier isEqualToString:kIASKPSSliderSpecifier]) {
@@ -831,11 +841,29 @@ CGRect IASKCGRectSwap(CGRect rect);
 	self.currentFirstResponder = textField;
 	return YES;
 }
+- (void)_dateDone:(id)sender {
+    if (![sender isKindOfClass:[IASKDatePickerBarButtonItem class]])
+		return;
+
+	[self _dateChanged:sender];
+
+	id realSender = ((IASKDatePickerBarButtonItem *)sender).datePicker;
+    IASKDatePicker* datePicker = (IASKDatePicker *)realSender;
+	IASKPSTextFieldSpecifierViewCell *textFieldCell = (id)[self.tableView cellForRowAtIndexPath:datePicker.inIndexPath];
+	[textFieldCell endEditing:YES];
+}
+
 - (void)_dateChanged:(id)sender {
-    if (![sender isKindOfClass:[IASKDatePicker class]])
+	id realSender = sender;
+	
+    if ([sender isKindOfClass:[IASKDatePickerBarButtonItem class]]) {
+		realSender = ((IASKDatePickerBarButtonItem *)sender).datePicker;
+	}
+
+    if (![realSender isKindOfClass:[IASKDatePicker class]])
         return;
     
-    IASKDatePicker *datePicker = (IASKDatePicker *)sender;
+    IASKDatePicker *datePicker = (IASKDatePicker *)realSender;
     
     IASKPSTextFieldSpecifierViewCell *textFieldCell = (id)[self.tableView cellForRowAtIndexPath:datePicker.inIndexPath];
     textFieldCell.textField.text = [datePicker formattedDate];

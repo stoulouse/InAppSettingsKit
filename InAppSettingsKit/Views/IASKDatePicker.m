@@ -36,7 +36,7 @@
 
 -(NSString *)dateFormatAccordingToRTL
 {
-    return self.isLocalLanguageRTL ? @"yy MMM dd" : @"MMM dd yy";
+    return @"dd/MM/yyyy";//self.isLocalLanguageRTL ? @"yy MMM dd" : @"MMM dd yy";
 }
 
 -(BOOL)isDatePickerModeDateOnly
@@ -53,4 +53,7 @@
     return dateFormatter;
 
 }
+@end
+
+@implementation IASKDatePickerBarButtonItem
 @end

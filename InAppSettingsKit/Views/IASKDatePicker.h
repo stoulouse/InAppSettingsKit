@@ -15,3 +15,9 @@
 @property (nonatomic, readonly) NSString *formattedDate;
 
 @end
+
+@interface IASKDatePickerBarButtonItem : UIBarButtonItem
+
+@property (nonatomic, strong) IASKDatePicker *datePicker;
+
+@end
